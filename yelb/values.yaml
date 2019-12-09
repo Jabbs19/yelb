@@ -1,0 +1,26 @@
+# Default values for yelb.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repo:
+    ui: mjtest.azurecr.io/yelb-ui
+    #ui: "mreferre/yelb-ui"
+    #db: mjtest.azurecr.io/yelb-db
+    db: "mreferre/yelb-db"
+
+    #appserver: mjtest.azurecr.io/yelb-appserver
+    appserver: "mreferre/yelb-appserver"
+
+  tag:
+    ui: 14
+    #ui: 0.5
+    #db: 14
+    db: 0.5
+
+    #app: 14
+    appserver: 0.5
+
+service:
+  type: LoadBalancer
+  port: 80

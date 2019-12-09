@@ -1,4 +1,4 @@
-# This should work on Kubernetes deployments that have LoadBalancer support
+# This should work on Kubernetes deployments on AWS that have an ALB ingress controller deployed. 
 apiVersion: v1
 kind: Service
 metadata:
@@ -52,14 +52,29 @@ metadata:
     app: yelb-ui
     tier: frontend
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
   - port: 80
-    protocol: TCP
-    targetPort: 80
   selector:
     app: yelb-ui
     tier: frontend
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "yelb-ui"
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+  labels:
+    app: "yelb-ui"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: "yelb-ui"
+              servicePort: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -75,7 +90,7 @@ spec:
     spec:
       containers:
       - name: yelb-ui
-        image:  mreferre/yelb-ui:0.5
+        image:  {{ .Values.image.repo.ui }}:{{ .Values.image.tag.ui }}
         ports:
         - containerPort: 80
 ---
@@ -111,7 +126,7 @@ spec:
     spec:
       containers:
       - name: yelb-db
-        image:  mreferre/yelb-db:0.5
+        image:  {{ .Values.image.repo.db }}:{{ .Values.image.tag.db }}
         ports:
         - containerPort: 5432
 ---
@@ -129,7 +144,7 @@ spec:
     spec:
       containers:
       - name: yelb-appserver
-        image:  mreferre/yelb-appserver:0.5
+        image:  {{ .Values.image.repo.appserver }}:{{ .Values.image.tag.appserver }}
         ports:
         - containerPort: 4567
 
