@@ -11,14 +11,18 @@ pool:
 
 steps:
 - script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  displayName: 'Initial Bash'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
+- task: Bash@3
+  displayName: 'Static Code Check'
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your commands here
+      
+      echo 'Static Code Check'
 - task: Docker@2
+  displayName: 'Build UI'
   inputs:
     containerRegistry: 'mjtest'
     repository: 'yelb-ui'
@@ -26,8 +30,17 @@ steps:
     Dockerfile: '**/yelb-ui/Dockerfile'
 
 - task: Docker@2
+  displayName: 'Build AppServer'
   inputs:
     containerRegistry: 'mjtest'
     repository: 'yelb-appserver'
     command: 'buildAndPush'
     Dockerfile: '**/yelb-appserver/Dockerfile'
+
+- task: Docker@2
+  displayName: 'Build DB'
+  inputs:
+    containerRegistry: 'mjtest'
+    repository: 'yelb-db'
+    command: 'buildAndPush'
+    Dockerfile: '**/yelb-db/Dockerfile'
