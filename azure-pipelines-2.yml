@@ -23,11 +23,11 @@ steps:
     containerRegistry: 'mjtest'
     repository: 'yelb-ui'
     command: 'buildAndPush'
-    Dockerfile: '/yelb-ui/Dockerfile'
+    Dockerfile: '**/yelb-ui/Dockerfile'
 
 - task: Docker@2
   inputs:
     containerRegistry: 'mjtest'
     repository: 'yelb-appserver'
     command: 'buildAndPush'
-    Dockerfile: '/yelb-appserver/Dockerfile'
+    Dockerfile: '**/yelb-appserver/Dockerfile'
