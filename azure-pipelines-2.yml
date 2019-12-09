@@ -11,7 +11,7 @@ pool:
 
 steps:
 - script: echo Hello, world!
-  displayName: 'Initial Bash'
+  displayName: 'Quick Script Bash'
 
 - task: Bash@3
   displayName: 'Static Code Check'
